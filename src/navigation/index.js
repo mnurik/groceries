@@ -2,7 +2,7 @@ import React from 'react';
 import { addNavigationHelpers } from 'react-navigation';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Platform } from 'react-native';
-
+import { Container } from 'native-base';
 import Navigator from './routes';
 
 const mapStateToProps = state => state;
@@ -11,12 +11,12 @@ const mapStateToProps = state => state;
 export default class ScreenManager extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
+            <Container style={styles.container}>
                 <Navigator navigation={addNavigationHelpers({
                     dispatch: this.props.dispatch,
                     state: this.props.navigate,
                 })} />
-            </View>
+            </Container>
         );
     }
 }
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         ...Platform.select({
-            ios: { paddingTop: 0 }
+            ios: { paddingTop: 30 }
         })
     },
     loading: {
