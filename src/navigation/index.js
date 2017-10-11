@@ -1,22 +1,24 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { addNavigationHelpers } from 'react-navigation';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Platform } from 'react-native';
 import { Container } from 'native-base';
 import Navigator from './routes';
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => ({
+    navigate: state.navigate
+});
 
 @connect(mapStateToProps)
 export default class ScreenManager extends React.Component {
     render() {
         return (
-            <Container style={styles.container}>
-                <Navigator navigation={addNavigationHelpers({
-                    dispatch: this.props.dispatch,
-                    state: this.props.navigate,
-                })} />
-            </Container>
+            <Navigator navigation={addNavigationHelpers({
+                dispatch: this.props.dispatch,
+                state: this.props.navigate
+            })} />
+
         );
     }
 }

@@ -1,12 +1,7 @@
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 
 import AllList from '../../containers/AllList';
 import Baskets from '../../containers/Baskets';
-
-StackNavigator({
-    AllList: { screen: AllList },
-    Baskets: { screen: Baskets }
-}, { headerMode: "none" });
 
 export default TabNavigator({
     AllList: {

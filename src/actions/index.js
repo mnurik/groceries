@@ -1,3 +1,5 @@
 import { ADD_GROCERY } from './../constants';
 
-export const addGrocery = (name) => ({ type: ADD_GROCERY, payload: name });
+const createAction = ({ type, payload }) => dispatch => dispatch({ type, payload });
+
+export const addGrocery = (name) => createAction({ type: ADD_GROCERY, payload: name });

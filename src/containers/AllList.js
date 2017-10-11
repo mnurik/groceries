@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
-import { connect } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { FlatList, Text, TouchableOpacity, TouchableHighlight, View } from 'react-native';
 import { Container, Header, Button, Title, Body } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import GroceryModal from './../components/Modal';
-import { addGrocery } from './../actions';
+import * as GroceryActions from './../actions';
 
-// @connect(state => state)
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(GroceryActions, dispatch)
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class AllList extends Component {
     constructor(props) {
         super(props);
         this.state = { modalVisible: false, name: '' };
+    }
+
+    static propTypes = {
+        products: PropTypes.array.isRequired,
+        actions: PropTypes.object.isRequired
     }
 
     static navigationOptions = {
@@ -24,7 +37,7 @@ class AllList extends Component {
     }
 
     handleAddItem = () => {
-        this.props.dispatch(addGrocery(this.state.name));
+        this.props.actions.addGrocery(this.state.name);
         this.setState({ modalVisible: false, name: '' });
     }
 
@@ -44,7 +57,7 @@ class AllList extends Component {
                     onChange={(name) => this.setState({ name })}
                 />
                 <FlatList
-                    data={[{ key: 'a' }, { key: 'b' }]}
+                    data={this.props.products.map(p => ({ key: p }))}
                     renderItem={({ item }) => <Text>{item.key}</Text>}
                 />
             </Container>

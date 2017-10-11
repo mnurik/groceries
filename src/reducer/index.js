@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import navigate from './nav';
-import product from './product';
+import products from './products';
 
 export default combineReducers({
     navigate,
-    product
+    products
 });
