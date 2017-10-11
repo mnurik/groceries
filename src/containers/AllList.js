@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { FlatList, Text, TouchableOpacity, Modal } from 'react-native';
+import { connect } from "redux";
+import { FlatList, Text, TouchableOpacity, TouchableHighlight, View } from 'react-native';
 import { Container, Header, Button, Title, Body } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import GroceryModal from './../components/Modal';
+import { addGrocery } from './../actions';
 
+// @connect(state => state)
 class AllList extends Component {
     constructor(props) {
         super(props);
-        this.state = { modalVisible: false };
-    }
-
-    setModalVisible = () => {
-        this.setState((prev, nextState) => { modalVisible: !nextState });
+        this.state = { modalVisible: false, name: '' };
     }
 
     static navigationOptions = {
@@ -18,6 +18,15 @@ class AllList extends Component {
             <Icon name="list" />
         )
     };
+
+    setModalVisible = () => {
+        this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
+    }
+
+    handleAddItem = () => {
+        this.props.dispatch(addGrocery(this.state.name));
+        this.setState({ modalVisible: false, name: '' });
+    }
 
     render() {
         return (
@@ -28,13 +37,12 @@ class AllList extends Component {
                     </Body>
                     <TouchableOpacity onPress={this.setModalVisible}><Icon name="add" /></TouchableOpacity>
                 </Header>
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => { alert("Modal has been closed.") }}
-                >
-                </Modal>
+                <GroceryModal
+                    {...this.state}
+                    setModalVisible={this.setModalVisible}
+                    onAddItem={this.handleAddItem}
+                    onChange={(name) => this.setState({ name })}
+                />
                 <FlatList
                     data={[{ key: 'a' }, { key: 'b' }]}
                     renderItem={({ item }) => <Text>{item.key}</Text>}
