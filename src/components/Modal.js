@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
     Content,
-    Item,
-    Input,
     Container,
     Header,
     Body,
@@ -29,21 +27,13 @@ class GroceryModal extends Component {
                         <Body>
                             <Title>Groceries</Title>
                         </Body>
-                        <Button onPress={this.props.onAddItem} transparent>
-                            <Text>Done</Text>
-                        </Button>
+                        {this.props.showDoneButton &&
+                            <Button onPress={this.props.onAddItem} transparent>
+                                <Text>Done</Text>
+                            </Button>}
                     </Header>
                     <Content>
-                        <Item>
-                            <Input
-                                onChangeText={this.props.onChange}
-                                onSubmitEditing={this.props.onAddItem}
-                                placeholder="Type name"
-                                blurOnSubmit={false}
-                                returnKeyType="done"
-                                value={this.props.name}
-                            />
-                        </Item>
+                        {this.props.children}
                     </Content>
                 </Container>
             </Modal>

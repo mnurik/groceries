@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { FlatList, Text, TouchableOpacity, TouchableHighlight, View } from 'react-native';
-import { Container, Header, Button, Title, Body } from 'native-base';
+import { Container, Header, Button, Title, Body, Item, Input } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import GroceryModal from './../components/Modal';
 import * as GroceryActions from './../actions';
@@ -34,7 +34,7 @@ class AllList extends Component {
 
     componentWillMount() {
         storage.getItem('products')
-            .then(res => this.props.actions.loadGroceries(res));
+            .then(res => res && this.props.actions.loadGroceries(res));
     }
 
     setModalVisible = () => {
@@ -42,9 +42,30 @@ class AllList extends Component {
     }
 
     handleAddItem = () => {
-        storage.setItem('products', [...this.props.products, this.state.name])
-            .then(() => this.props.actions.addGrocery(this.state.name))
+        const newGrocery = { id: Date.now(), name: this.state.name, acquired: false };
+        storage.setItem('products', [...this.props.products, newGrocery])
+            .then(() => this.props.actions.addGrocery(newGrocery))
             .then(() => this.setState({ modalVisible: false, name: '' }));
+    }
+
+    handleAcquiered = (id) => {
+        storage.setItem('products', this.props.products.map(product => {
+            if (product.id === id) {
+                product.acquired = true;
+            }
+            return product;
+        }))
+            .then(() => this.props.actions.acquiringGroceries(id));
+    }
+
+    handleCancelAcquiered = (id) => {
+        storage.setItem('products', this.props.products.map(product => {
+            if (product.id === id) {
+                product.acquired = false;
+            }
+            return product;
+        }))
+            .then(() => this.props.actions.cancelAcquiringGroceries(id))
     }
 
     render() {
@@ -62,9 +83,24 @@ class AllList extends Component {
                     {...this.state}
                     setModalVisible={this.setModalVisible}
                     onAddItem={this.handleAddItem}
-                    onChange={(name) => this.setState({ name })}
+                >
+                    <Item>
+                        <Input
+                            onChangeText={(name) => this.setState({ name })}
+                            onSubmitEditing={this.handleAddItem}
+                            placeholder="Type name"
+                            blurOnSubmit={false}
+                            returnKeyType="done"
+                            value={this.state.name}
+                        />
+                    </Item>
+                </GroceryModal>
+                <ProductList
+                    show={true}
+                    products={this.props.products}
+                    onAcquiered={this.handleAcquiered}
+                    onCancelAcquiered={this.handleCancelAcquiered}
                 />
-                <ProductList list={this.props.products} />
             </Container>
         );
     }
