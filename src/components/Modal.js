@@ -7,7 +7,8 @@ import {
     Header,
     Body,
     Title,
-    Icon
+    Icon,
+    Button
 } from "native-base";
 import { Modal, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import PropTypes from 'prop-types';
@@ -20,17 +21,17 @@ class GroceryModal extends Component {
                 transparent={false}
                 visible={this.props.modalVisible}
             >
-                <Container style={styles.container}>
+                <Container>
                     <Header>
-                        <TouchableOpacity onPress={this.props.setModalVisible}>
+                        <Button onPress={this.props.setModalVisible} transparent>
                             <Text>Cancel</Text>
-                        </TouchableOpacity>
+                        </Button>
                         <Body>
                             <Title>Groceries</Title>
                         </Body>
-                        <TouchableOpacity onPress={this.props.onAddItem}>
+                        <Button onPress={this.props.onAddItem} transparent>
                             <Text>Done</Text>
-                        </TouchableOpacity>
+                        </Button>
                     </Header>
                     <Content>
                         <Item>

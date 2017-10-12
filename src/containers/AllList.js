@@ -7,6 +7,8 @@ import { Container, Header, Button, Title, Body } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import GroceryModal from './../components/Modal';
 import * as GroceryActions from './../actions';
+import ProductList from "./../components/List";
+import * as storage from "./../utils/storage";
 
 const mapStateToProps = state => state;
 
@@ -27,18 +29,22 @@ class AllList extends Component {
     }
 
     static navigationOptions = {
-        tabBarIcon: ({ tintColor }) => (
-            <Icon name="list" />
-        )
+        tabBarIcon: ({ tintColor }) => <Icon name="list" style={{ fontSize: 30 }} />
     };
+
+    componentWillMount() {
+        storage.getItem('products')
+            .then(res => this.props.actions.loadGroceries(res));
+    }
 
     setModalVisible = () => {
         this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
     }
 
     handleAddItem = () => {
-        this.props.actions.addGrocery(this.state.name);
-        this.setState({ modalVisible: false, name: '' });
+        storage.setItem('products', [...this.props.products, this.state.name])
+            .then(() => this.props.actions.addGrocery(this.state.name))
+            .then(() => this.setState({ modalVisible: false, name: '' }));
     }
 
     render() {
@@ -48,7 +54,9 @@ class AllList extends Component {
                     <Body>
                         <Title>Groceries</Title>
                     </Body>
-                    <TouchableOpacity onPress={this.setModalVisible}><Icon name="add" /></TouchableOpacity>
+                    <Button onPress={this.setModalVisible} transparent>
+                        <Icon name="add" style={{ fontSize: 20 }} />
+                    </Button>
                 </Header>
                 <GroceryModal
                     {...this.state}
@@ -56,10 +64,7 @@ class AllList extends Component {
                     onAddItem={this.handleAddItem}
                     onChange={(name) => this.setState({ name })}
                 />
-                <FlatList
-                    data={this.props.products.map(p => ({ key: p }))}
-                    renderItem={({ item }) => <Text>{item.key}</Text>}
-                />
+                <ProductList list={this.props.products} />
             </Container>
         );
     }

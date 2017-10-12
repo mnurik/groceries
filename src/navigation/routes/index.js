@@ -14,10 +14,8 @@ export default TabNavigator({
         tabBarPosition: 'bottom',
         animationEnabled: true,
         tabBarOptions: {
+            inactiveTintColor: '#b0b6be',
             activeTintColor: '#000',
-            showLabel: false,
-            iconStyle: {
-                fontSize: 16,
-            },
+            showLabel: false
         },
     })
