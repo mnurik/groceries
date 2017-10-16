@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { FlatList, Text, TouchableOpacity, TouchableHighlight, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, TouchableHighlight, View, Image, StyleSheet } from 'react-native';
 import { Container, Header, Button, Title, Body, Item, Input } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import GroceryModal from './../components/Modal';
@@ -29,7 +29,10 @@ class AllList extends Component {
     }
 
     static navigationOptions = {
-        tabBarIcon: ({ tintColor }) => <Icon name="list" style={{ fontSize: 30 }} />
+        tabBarIcon: ({ tintColor }) => <Image
+            source={require('./../assets/home.png')}
+            style={{ width: 26, height: 26, tintColor: tintColor }}
+        />
     };
 
     componentWillMount() {
@@ -83,6 +86,7 @@ class AllList extends Component {
                     {...this.state}
                     setModalVisible={this.setModalVisible}
                     onAddItem={this.handleAddItem}
+                    showDoneButton={true}
                 >
                     <Item>
                         <Input

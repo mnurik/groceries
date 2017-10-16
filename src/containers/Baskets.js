@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, Image } from 'react-native';
 import { Container, Header, Button, Title, Body, Content, ListItem, Left, List } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
@@ -25,7 +25,10 @@ class Baskets extends Component {
     }
 
     static navigationOptions = {
-        tabBarIcon: ({ tintColor }) => <Icon name="shopping-cart" style={{ fontSize: 28 }} />
+        tabBarIcon: ({ tintColor }) => <Image
+            source={require('./../assets/basket.png')}
+            style={{ width: 26, height: 26, tintColor: tintColor }}
+        />
     };
 
     static propTypes = {
